@@ -23,7 +23,9 @@
   <ul>
     {% for b in bills %}
       <li>
-        {{ b.title }}
+        <a href="{% url 'bill_detail' b.slug %}">
+          {{ b.number }} - {{ b.title }}
+        </a>
       </li>
     {% endfor %}
   </ul>

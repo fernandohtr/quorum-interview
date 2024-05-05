@@ -90,3 +90,9 @@ class DetailLegislator(DetailView):
     template_name = "congress/legislator_detail.html"
     model = Legislator
     context_object_name = "legislator"
+
+
+class DetailBill(DetailView):
+    template_name = "congress/bill_detail.html"
+    model = Bill
+    context_object_name = "bill"

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{{ bill.number }} - {{ bill.title }}</h1>
+
+<ul>
+  <li>Origin: {{ bill.get_origin_display }}</li>
+  {% if bill.sponsor %}
+    <li>Sponsor: {{ bill.sponsor }}</li>
+  {% endif %}
+</ul>
+
+{% endblock %}

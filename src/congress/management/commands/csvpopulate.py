@@ -79,7 +79,7 @@ class Command(BaseCommand):
                 bill_data = row["title"].split()
 
                 origin = bill_data[0]
-                number = bill_data[1]
+                number = bill_data[1][:-1]
                 title = " ".join(bill_data[2:])
 
                 try:
