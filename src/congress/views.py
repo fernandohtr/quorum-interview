@@ -1,5 +1,5 @@
 from django.db.models import Case, Count, IntegerField, When
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
 from congress.models import Bill, Legislator, VoteResult
@@ -84,3 +84,9 @@ class ListLegislatorsAndBillsView(ListView):
         context["bills"] = Bill.objects.all()
 
         return context
+
+
+class DetailLegislator(DetailView):
+    template_name = "congress/legislator_detail.html"
+    model = Legislator
+    context_object_name = "legislator"

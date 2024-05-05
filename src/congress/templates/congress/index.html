@@ -9,7 +9,9 @@
   <ul>
     {% for l in legislators %}
       <li>
-        {{ l.name }}
+        <a href="{% url 'legislator_detail' l.slug %}">
+          {{ l.name }}
+        </a>
       </li>
     {% endfor %}
   </ul>

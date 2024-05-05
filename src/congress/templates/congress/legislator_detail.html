@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{{ legislator.get_congress_house_display }} {{ legislator.name }}</h1>
+
+<ul>
+  <li>Political Party: {{ legislator.get_political_party_display }}</li>
+  <li>State: {{ legislator.get_state_display }}</li>
+  <li>District: {{ legislator.district }}</li>
+</ul>
+
+{% endblock %}
