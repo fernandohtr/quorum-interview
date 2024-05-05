@@ -65,10 +65,14 @@ class Command(BaseCommand):
                         sponsor=Legislator.objects.get(id=row["sponsor_id"]),
                     )
                 except Legislator.DoesNotExist:
+                    Bill.objects.create(
+                        id=row["id"],
+                        title=row["title"],
+                        sponsor=None,
+                    )
                     print(
                         f"[csv inconsistency] [bill id {row["id"]}] Does not exist Legislator with id: {row["sponsor_id"]}"
                     )
-                    continue
 
     def update_vote(self, csv_path):
         with open(csv_path) as csv_file:
@@ -80,8 +84,11 @@ class Command(BaseCommand):
                         bill=Bill.objects.get(id=row["bill_id"]),
                     )
                 except Bill.DoesNotExist:
+                    Vote.objects.create(
+                        id=row["id"],
+                        bill=None,
+                    )
                     print(f"[csv inconsistency] [vote id {row["id"]}] Does not exist Bill with id: {row["bill_id"]}")
-                    continue
 
     def update_vote_result(self, csv_path):
         with open(csv_path) as csv_file:
@@ -95,7 +102,22 @@ class Command(BaseCommand):
                         vote_type=row["vote_type"],
                     )
                 except Vote.DoesNotExist:
+                    VoteResult.objects.create(
+                        id=row["id"],
+                        legislator=Legislator.objects.get(id=row["legislator_id"]),
+                        vote=None,
+                        vote_type=row["vote_type"],
+                    )
                     print(
                         f"[csv inconsistency] [vote result id {row["id"]}] Does not exist Vote with id: {row["vote_id"]}"
                     )
-                    continue
+                except Legislator.DoesNotExist:
+                    VoteResult.objects.create(
+                        id=row["id"],
+                        legislator=None,
+                        vote=Vote.objects.get(id=row["vote_id"]),
+                        vote_type=row["vote_type"],
+                    )
+                    print(
+                        f"[csv inconsistency] [vote result id {row["id"]}] Does not exist Legislator with id: {row["legislator_id"]}"
+                    )

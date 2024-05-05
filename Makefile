@@ -12,3 +12,6 @@ requirements:
 
 populate:
 	./src/manage.py csvpopulate
+
+up:
+	./src/manage.py runserver

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Summary of Legislators votes</h1>
+<a href="{% url 'legislator_vote_result' %}">New search</a>
+
+<form action="{% url 'legislator_vote_result' %}" method="get">
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+
+<h2>Result</h2>
+
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Legislator</th>
+    <th>Supported bills</th>
+    <th>Opposed bills</th>
+  </thead>
+  <tbody>
+    {% for legislator in legislators %}
+      <tr>
+        <td>{{ legislator.id }}</td>
+        <td>{{ legislator.name }}</td>
+        <td>{{ legislator.supported_votes }}</td>
+        <td>{{ legislator.opposed_votes }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
