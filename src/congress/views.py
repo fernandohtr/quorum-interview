@@ -72,3 +72,15 @@ class ListBillsVoteView(ListView):
         context["form"] = BillVoteResultForm()
 
         return context
+
+
+class ListLegislatorsAndBillsView(ListView):
+    template_name = "congress/index.html"
+    model = Legislator
+    context_object_name = "legislators"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["bills"] = Bill.objects.all()
+
+        return context

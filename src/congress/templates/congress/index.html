@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Welcome to American Congress Data</h1>
+
+<div class="legislators">
+  <h2>Legislators</h2>
+  
+  <ul>
+    {% for l in legislators %}
+      <li>
+        {{ l.name }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="bills">
+  <h2>Bills</h2>
+  
+  <ul>
+    {% for b in bills %}
+      <li>
+        {{ b.title }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
