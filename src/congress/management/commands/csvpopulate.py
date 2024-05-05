@@ -49,25 +49,53 @@ class Command(BaseCommand):
         with open(csv_path) as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
+                legislator_data = row["name"].split()
+                congress_data = legislator_data[-1][1:-1].split("-")
+
+                congress_house_type = {
+                    "Rep.": 1,
+                    "S.": 2,
+                }
+
+                name = " ".join(legislator_data[1:-1])
+                political_party = congress_data[0]
+                state = congress_data[1]
+                district = congress_data[2]
+                congress_house = congress_house_type.get(legislator_data[0])
+
                 Legislator.objects.create(
                     id=row["id"],
-                    name=row["name"],
+                    name=name,
+                    political_party=political_party,
+                    state=state,
+                    district=district,
+                    congress_house=congress_house,
                 )
 
     def update_bill(self, csv_path):
         with open(csv_path) as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
+                bill_data = row["title"].split()
+
+                origin = bill_data[0]
+                number = bill_data[1]
+                title = " ".join(bill_data[2:])
+
                 try:
                     Bill.objects.create(
                         id=row["id"],
-                        title=row["title"],
+                        origin=origin,
+                        number=number,
+                        title=title,
                         sponsor=Legislator.objects.get(id=row["sponsor_id"]),
                     )
                 except Legislator.DoesNotExist:
                     Bill.objects.create(
                         id=row["id"],
-                        title=row["title"],
+                        origin=origin,
+                        number=number,
+                        title=title,
                         sponsor=None,
                     )
                     print(
