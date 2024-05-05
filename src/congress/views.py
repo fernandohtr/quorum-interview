@@ -1,60 +1,74 @@
 from django.db.models import Case, Count, IntegerField, When
-from django.shortcuts import render
+from django.views.generic import ListView
 
 from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
 from congress.models import Bill, Legislator, VoteResult
 
 
-def legislator_vote_result(request):
-    legislator_name = request.GET.get("name")
+class ListLegislatorsVoteView(ListView):
+    template_name = "congress/legislator_vote_result.html"
+    context_object_name = "legislators"
 
-    legislators_with_votes = Legislator.objects.annotate(
-        supported_votes=Count(
-            Case(
-                When(voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
-                output_field=IntegerField(),
+    def get_queryset(self):
+        legislator_name = self.request.GET.get("name")
+
+        legislators_with_votes = Legislator.objects.annotate(
+            supported_votes=Count(
+                Case(
+                    When(voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+            opposed_votes=Count(
+                Case(
+                    When(voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+        ).values("id", "name", "supported_votes", "opposed_votes")
+
+        if legislator_name:
+            legislators_with_votes = legislators_with_votes.filter(name__icontains=legislator_name)
+
+        return legislators_with_votes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = LegislatorVoteResultForm()
+
+        return context
+
+
+class ListBillsVoteView(ListView):
+    template_name = "congress/bill_vote_result.html"
+    context_object_name = "bills"
+
+    def get_queryset(self):
+        bill_title = self.request.GET.get("title")
+
+        bills_with_counts = Bill.objects.annotate(
+            supported_votes=Count(
+                Case(
+                    When(vote__voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+            opposed_votes=Count(
+                Case(
+                    When(vote__voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+        ).values("id", "title", "supported_votes", "opposed_votes", "sponsor__name")
+
+        if bill_title:
+            bills_with_counts = bills_with_counts.filter(title__icontains=bill_title).values(
+                "id", "title", "supported_votes", "opposed_votes", "sponsor__name"
             )
-        ),
-        opposed_votes=Count(
-            Case(
-                When(voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
-                output_field=IntegerField(),
-            )
-        ),
-    ).values("id", "name", "supported_votes", "opposed_votes")
+        return bills_with_counts
 
-    if legislator_name:
-        legislators_with_votes = legislators_with_votes.filter(name__icontains=legislator_name)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = BillVoteResultForm()
 
-    context = {"legislators": legislators_with_votes, "form": LegislatorVoteResultForm()}
-    return render(request, "congress/legislator_vote_result.html", context)
-
-
-def bill_vote_result(request):
-    bill_title = request.GET.get("title")
-
-    bills_with_counts = Bill.objects.annotate(
-        supported_votes=Count(
-            Case(
-                When(vote__voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
-                output_field=IntegerField(),
-            )
-        ),
-        opposed_votes=Count(
-            Case(
-                When(vote__voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
-                output_field=IntegerField(),
-            )
-        ),
-    ).values("id", "title", "supported_votes", "opposed_votes", "sponsor__name")
-
-    if bill_title:
-        bills_with_counts = bills_with_counts.filter(title__icontains=bill_title).values(
-            "id", "title", "supported_votes", "opposed_votes", "sponsor__name"
-        )
-
-    context = {
-        "bills": bills_with_counts,
-        "form": BillVoteResultForm(),
-    }
-    return render(request, "congress/bill_vote_result.html", context)
+        return context
