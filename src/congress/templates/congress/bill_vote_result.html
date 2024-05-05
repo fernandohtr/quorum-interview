@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Summary of Bill votes</h1>
+<a href="{% url 'bill_vote_result' %}">New search</a>
+
+<form action="{% url 'bill_vote_result' %}" method="get">
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+
+<h2>Result</h2>
+
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Bill</th>
+    <th>Supporters</th>
+    <th>Opposers</th>
+    <th>Primary Sponsor</th>
+  </thead>
+  <tbody>
+    {% for bill in bills %}
+      <tr>
+        <td>{{ bill.id }}</td>
+        <td>{{ bill.title }}</td>
+        <td>{{ bill.supported_votes }}</td>
+        <td>{{ bill.opposed_votes }}</td>
+        <td>{{ bill.sponsor__name }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
