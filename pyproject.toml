@@ -10,6 +10,18 @@ python = "^3.12"
 django = "^5.0.4"
 
 
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.1.0"
+black = "^24.4.2"
+isort = "^5.13.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+[tool.pylint.config_files]
+rcfile = ".pylintrc"

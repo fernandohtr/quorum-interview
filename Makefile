@@ -1,0 +1,2 @@
+style:
+	black . && pylint . && isort .
