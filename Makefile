@@ -9,3 +9,6 @@ migrate:
 
 requirements:
 	poetry export -f requirements.txt --without-hashes --without-urls --with dev -o requirements.txt
+
+populate:
+	./src/manage.py csvpopulate

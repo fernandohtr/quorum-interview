@@ -33,3 +33,39 @@ After create a virtual environment (ex. [venv](https://docs.python.org/3/library
 ```bash
 pip install -r requirements.txt
 ```
+
+## How to Use the Project
+
+### 1. Create database
+
+To do this, just run:
+
+```bash
+make migrate
+```
+
+### 2. Populate the database
+
+Place the CSV files in the directory `/src/congress/csvfiles/`.
+
+`WARNING`:
+- It is essential that the file names begin with the following patterns: legislators, bills, votes
+ and vote_results.
+- There should only be four files in the `csvfiles/` directory
+
+After that and run:
+
+```bash
+make populate
+```
+
+If there is any inconsistency in the data imported from the CSV file, error messages similar to
+ these will appear.
+
+```bash
+[csv inconsistency] [bill id 2900994] Does not exist Legislator with sponsor_id: 400100
+[csv inconsistency] [vote id 3314452] Does not exist Bill with bill_id: 29
+[csv inconsistency] [vote id 3321166] Does not exist Bill with bill_id: 295
+[csv inconsistency] [vote result id 92516784] Does not exist Vote with vote_id: 3321166
+[csv inconsistency] [vote result id 92516770] Does not exist Vote with vote_id: 3321166
+```
