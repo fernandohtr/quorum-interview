@@ -12,4 +12,20 @@
   {% endif %}
 </ul>
 
+<table>
+  <thead>
+    <th>Supporters</th>
+    <th>Opposers</th>
+  </thead>
+  <tbody>
+    {% for supported, opposed in legislators %}
+      <tr>
+        <td>{{ supported }}</td>
+        <td>{{ opposed }}</td>
+      </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
 {% endblock %}

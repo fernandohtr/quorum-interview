@@ -134,3 +134,39 @@ class DetailBill(DetailView):
     template_name = "congress/bill_detail.html"
     model = Bill
     context_object_name = "bill"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        supported_legislators = Legislator.objects.filter(
+            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
+            voteresult__vote__bill__id=context["bill"].id,
+        )
+
+        opposed_legislators = Legislator.objects.filter(
+            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
+            voteresult__vote__bill__id=context["bill"].id,
+        )
+
+        legislators = self.keep_same_length_legislators(supported_legislators, opposed_legislators)
+
+        context["legislators"] = legislators
+
+        return context
+
+    def keep_same_length_legislators(self, list1, list2):
+        len1 = list1.count()
+        len2 = list2.count()
+
+        list1 = [l.name for l in list1]
+        list2 = [l.name for l in list2]
+
+        max_length = max(len1, len2)
+
+        if len1 < max_length:
+            list1 += [""] * (max_length - len1)
+
+        elif len2 < max_length:
+            list2 += [""] * (max_length - len2)
+
+        return zip(list1, list2)
