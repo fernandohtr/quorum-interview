@@ -10,7 +10,9 @@ DJANGO_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.staticfiles",
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    "django_filters",
+]
 LOCAL_APPS = [
     "congress",
 ]
