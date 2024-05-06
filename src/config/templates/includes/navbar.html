@@ -1,18 +1,25 @@
-<p>Quorum App</p>
-<ul>
-  <li>
-    <a href="{% url 'index' %}">Home</a>
-  </li>
-  <li>
-    <a href="{% url 'bill_vote_result' %}">Bills votes</a>
-  </li>
-  <li>
-    <a href="{% url 'legislator_vote_result' %}">Legislators votes</a>
-  </li>
-  <li>
-    <a href="{% url 'legislator_list' %}">Legislators</a>
-  </li>
-  <li>
-    <a href="{% url 'bill_list' %}">Bills</a>
-  </li>
-</ul>
+<nav>
+  <h2>
+    <a href="{% url 'index' %}">
+      Quorum App
+    </a>
+  </h2>
+
+  <ul class="nav nav-pills flex-column">
+    <a href="{% url 'index' %}">
+      <li>Home</li>
+    </a>
+    <a href="{% url 'bill_vote_result' %}">
+      <li>Bills votes</li>
+    </a>
+    <a href="{% url 'legislator_vote_result' %}">
+      <li>Legislators votes</li>
+    </a>
+    <a href="{% url 'legislator_list' %}">
+      <li>Legislators</li>
+    </a>
+    <a href="{% url 'bill_list' %}">
+      <li>Bills</li>
+    </a>
+  </ul>
+</nav>

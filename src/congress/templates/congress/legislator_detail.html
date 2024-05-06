@@ -3,28 +3,33 @@
 {% block main %}
 <h1>{{ legislator.get_congress_house_display }} {{ legislator.name }}</h1>
 
-<ul>
-  <li>Political Party: {{ legislator.get_political_party_display }}</li>
-  <li>State: {{ legislator.get_state_display }}</li>
-  <li>District: {{ legislator.district }}</li>
-</ul>
+<section>
+  <ul>
+    <li>Political Party: {{ legislator.get_political_party_display }}</li>
+    <li>State: {{ legislator.get_state_display }}</li>
+    <li>District: {{ legislator.district }}</li>
+  </ul>
 
-<table>
-  <thead>
-    <th>Supporters</th>
-    <th>Opposers</th>
-  </thead>
-  <tbody>
-    {% for supported, opposed in votes %}
-      <tr>
-        <td>
-          {{ supported }}
-        </td>
-        <td>{{ opposed }}</td>
-      </tr>
-    {% endfor %}
+  <div class="table-component">
+    <table>
+      <thead>
+        <th>Bill supported</th>
+        <th>Bill opposed</th>
+      </thead>
+      <tbody>
+        {% for supported, opposed in votes %}
+          <tr>
+            <td>
+              {{ supported }}
+            </td>
+            <td>{{ opposed }}</td>
+          </tr>
+        {% endfor %}
 
-  </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+
+</section>
 
 {% endblock %}

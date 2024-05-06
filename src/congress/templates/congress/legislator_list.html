@@ -3,31 +3,36 @@
 {% block main %}
 <h1>Legislators</h1>
 
-<a href="{% url 'legislator_list' %}">New search</a>
+<section>
+  <a class="new-search" href="{% url 'legislator_list' %}">New search</a>
 
-<form action="{% url 'legislator_list' %}" method="get">
-  {{ form.as_p }}
-  <input type="submit" value="Submit">
-</form>
+  <form action="{% url 'legislator_list' %}" method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+  </form>
 
-<table>
-  <thead>
-    <th>Name</th>
-    <th>Political Party</th>
-    <th>State</th>
-    <th>Congress House</th>
-  </thead>
-  <tbody>
-    {% for legislator in legislators %}
-      <tr>
-        <td>{{ legislator.name }}</td>
-        <td>{{ legislator.get_political_party_display }}</td>
-        <td>{{ legislator.get_state_display }}</td>
-        <td>{{ legislator.get_congress_house_display }}</td>
-      </tr>
-    {% endfor %}
+  <div class="table-component">
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Political Party</th>
+        <th>State</th>
+        <th>Congress House</th>
+      </thead>
+      <tbody>
+        {% for legislator in legislators %}
+          <tr>
+            <td>{{ legislator.name }}</td>
+            <td>{{ legislator.get_political_party_display }}</td>
+            <td>{{ legislator.get_state_display }}</td>
+            <td>{{ legislator.get_congress_house_display }}</td>
+          </tr>
+        {% endfor %}
 
-  </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+
+</section>
 
 {% endblock %}

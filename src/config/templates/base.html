@@ -1,16 +1,19 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'index.css' %}">
+
   <title>Quorum App</title>
 </head>
 <body>
-  <nav>
-    {% include "includes/navbar.html" %}
-  </nav>
+  {% include "includes/navbar.html" %}
   <main>
     {% block main %}{% endblock %}
   </main>
+
 </body>
 </html>

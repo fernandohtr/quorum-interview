@@ -1,0 +1,179 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: sans-serif;
+}
+
+body{
+  background-color: #f3f5f9;
+  display: flex;
+  position: relative;
+}
+
+nav {
+  width: 200px;
+  height: 100%;
+  background-color: #221f54;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+nav h2 {
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+nav a,
+nav a:visited {
+  color: #fff;
+}
+
+nav ul li{
+  padding: 15px;
+  border-bottom: 1px solid #bdb8d7;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}  
+
+nav ul li a{
+  color: #bdb8d7;
+}
+
+nav ul li a {
+  width: 25px;
+}
+
+nav ul li:hover{
+  background-color: #594f8d;
+}
+
+nav ul li:hover a{
+  color: #fff;
+}
+
+main {
+  width: 100%;
+  margin-left: 200px;
+}
+
+main h1 {
+  padding: 20px;
+  width: 100%;
+  background: #fff;
+  color: #717171;
+  border-bottom: 1px solid #e0e4e8;
+}
+
+main h2 {
+  margin: 2rem 0;
+}
+
+main section {
+  margin: 20px;
+  color: #717171;
+  line-height: 25px;
+}
+
+main section a,
+main section a:visited {
+  color: #b132f1;
+  font-weight: 700;
+}
+
+.table-component {
+  overflow: auto;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.table-component table {
+  border: 1px none #dededf;
+  height: 100%;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 1px;
+  text-align: left;
+}
+
+.table-component h2 {
+  caption-side: top;
+  text-align: left;
+}
+
+.table-component th {
+  border: none;
+  background-color: #221f54;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.table-component td {
+  border: 1px none #dededf;
+  padding: 5px;
+}
+
+.table-component tr:nth-child(even) td {
+  background-color: #d3ccf5;
+  color: #000000;
+}
+
+.table-component tr:nth-child(odd) td {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.container-index {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+main section .new-search {
+  background-color: #221f54;
+  padding: 0.5rem;
+  border-radius: 10px;
+  color: #ffffff;
+  transition: all ease 0.4s;
+}
+
+main section .new-search:hover {
+  background-color: #b4a9ec;
+}
+
+main section form {
+  margin-top: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, .3);
+}
+
+main section form select,
+main section form input[type=text] {
+  width: 100%;
+  height: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid silver;
+}
+
+main section form input[type=submit] {
+  width: 100%;
+  height: 2rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #221f54;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}

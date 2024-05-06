@@ -3,29 +3,34 @@
 {% block main %}
 <h1>{{ bill.number }} - {{ bill.title }}</h1>
 
-<ul>
-  <li>Origin: {{ bill.get_origin_display }}</li>
-  {% if bill.sponsor %}
-    <li>Sponsor: {{ bill.sponsor }}</li>
-  {% else %}
-    <li>Sponsor: Uninformed</li>
-  {% endif %}
-</ul>
+<section>
+  <ul>
+    <li>Origin: {{ bill.get_origin_display }}</li>
+    {% if bill.sponsor %}
+      <li>Sponsor: {{ bill.sponsor }}</li>
+    {% else %}
+      <li>Sponsor: Uninformed</li>
+    {% endif %}
+  </ul>
 
-<table>
-  <thead>
-    <th>Supporters</th>
-    <th>Opposers</th>
-  </thead>
-  <tbody>
-    {% for supported, opposed in legislators %}
-      <tr>
-        <td>{{ supported }}</td>
-        <td>{{ opposed }}</td>
-      </tr>
-    {% endfor %}
+  <div class="table-component">
+    <table>
+      <thead>
+        <th>Supporters of the bills</th>
+        <th>Opposers of the bills</th>
+      </thead>
+      <tbody>
+        {% for supported, opposed in legislators %}
+          <tr>
+            <td>{{ supported }}</td>
+            <td>{{ opposed }}</td>
+          </tr>
+        {% endfor %}
 
-  </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+
+</section>
 
 {% endblock %}

@@ -1,34 +1,40 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h1>Welcome to American Congress Data</h1>
+<h1>Welcome to US Congressional Data</h1>
 
-<div class="legislators">
-  <h2>Legislators</h2>
-  
-  <ul>
-    {% for l in legislators %}
-      <li>
-        <a href="{% url 'legislator_detail' l.slug %}">
-          {{ l.name }}
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+<section>
+  <div class="container-index">
+    <div class="legislators">
+      <h2>Legislators</h2>
 
-<div class="bills">
-  <h2>Bills</h2>
-  
-  <ul>
-    {% for b in bills %}
-      <li>
-        <a href="{% url 'bill_detail' b.slug %}">
-          {{ b.number }} - {{ b.title }}
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+      <ul>
+        {% for l in legislators %}
+          <li>
+            <a href="{% url 'legislator_detail' l.slug %}">
+              {{ l.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="bills">
+      <h2>Bills</h2>
+
+      <ul>
+        {% for b in bills %}
+          <li>
+            <a href="{% url 'bill_detail' b.slug %}">
+              {{ b.number }} - {{ b.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+</section>
 
 {% endblock %}

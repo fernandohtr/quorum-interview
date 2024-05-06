@@ -3,35 +3,40 @@
 {% block main %}
 <h1>Bills</h1>
 
-<form action="{% url 'bill_list' %}" method="get">
-  {{ form.as_p }}
-  <input type="submit" value="Submit">
-</form>
+<section>
+  <form action="{% url 'bill_list' %}" method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+  </form>
 
-<table>
-  <thead>
-    <th>Number</th>
-    <th>Title</th>
-    <th>Origin</th>
-    <th>Sponsor</th>
-  </thead>
-  <tbody>
-    {% for bill in bills %}
-      <tr>
-        <td>{{ bill.number }}</td>
-        <td>{{ bill.title }}</td>
-        <td>{{ bill.get_origin_display }}</td>
-        {% if bill.sponsor %}
-          <td>
-              {{ bill.sponsor }}
-          </td>
-        {% else %}
-          <td>Uninformed</td>
-        {% endif %}
-      </tr>
-    {% endfor %}
+  <div class="table-component">
+    <table>
+      <thead>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Origin</th>
+        <th>Sponsor</th>
+      </thead>
+      <tbody>
+        {% for bill in bills %}
+          <tr>
+            <td>{{ bill.number }}</td>
+            <td>{{ bill.title }}</td>
+            <td>{{ bill.get_origin_display }}</td>
+            {% if bill.sponsor %}
+              <td>
+                  {{ bill.sponsor }}
+              </td>
+            {% else %}
+              <td>Uninformed</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
 
-  </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+
+</section>
 
 {% endblock %}

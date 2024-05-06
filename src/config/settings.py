@@ -43,8 +43,17 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "America/New_York"
 USE_TZ = True
-STATIC_URL = "/staticfiles/"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "config/templates/static/css"),
+]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
