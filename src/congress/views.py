@@ -2,7 +2,7 @@ from django.db.models import Case, Count, IntegerField, When
 from django.views.generic import DetailView, ListView
 
 from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
-from congress.filters import LegislatorFilter
+from congress.filters import BillFilter, LegislatorFilter
 from congress.models import Bill, Legislator, Vote, VoteResult
 
 
@@ -145,6 +145,22 @@ class LegislatorDetail(DetailView):
             list2 += [""] * (max_length - len2)
 
         return zip(list1, list2)
+
+
+class BillList(ListView):
+    queryset = Bill.objects.all()
+    template = "congress/bill_list.html"
+    context_object_name = "bills"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = BillFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.filterset.form
+        return context
 
 
 class BillDetail(DetailView):
