@@ -59,11 +59,11 @@ class ListBillsVoteView(ListView):
                     output_field=IntegerField(),
                 )
             ),
-        ).values("id", "title", "supported_votes", "opposed_votes", "sponsor__name")
+        ).values("title", "slug", "supported_votes", "opposed_votes", "sponsor__name", "sponsor__slug")
 
         if bill_title:
             bills_with_counts = bills_with_counts.filter(title__icontains=bill_title).values(
-                "id", "title", "supported_votes", "opposed_votes", "sponsor__name"
+                "title", "slug", "supported_votes", "opposed_votes", "sponsor__name", "sponsor__slug"
             )
         return bills_with_counts
 
@@ -79,11 +79,11 @@ class ListLegislatorsAndBillsView(ListView):
     context_object_name = "legislators"
 
     def get_queryset(self):
-        return Legislator.objects.order_by("name")
+        return Legislator.objects.order_by("name").exclude("id")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["bills"] = Bill.objects.order_by("-number")
+        context["bills"] = Bill.objects.order_by("-number").exclude("id")
 
         return context
 

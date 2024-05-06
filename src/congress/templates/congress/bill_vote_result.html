@@ -13,7 +13,6 @@
 
 <table>
   <thead>
-    <th>ID</th>
     <th>Bill</th>
     <th>Supporters</th>
     <th>Opposers</th>
@@ -22,11 +21,22 @@
   <tbody>
     {% for bill in bills %}
       <tr>
-        <td>{{ bill.id }}</td>
-        <td>{{ bill.title }}</td>
+        <td>
+          <a href="{% url 'bill_detail' bill.slug %}">
+            {{ bill.title }}
+          </a>
+        </td>
         <td>{{ bill.supported_votes }}</td>
         <td>{{ bill.opposed_votes }}</td>
-        <td>{{ bill.sponsor__name }}</td>
+        {% if bill.sponsor__name %}
+          <td>
+            <a href="{% url 'legislator_detail' bill.sponsor__slug %}">
+              {{ bill.sponsor__name }}
+            </a>
+          </td>
+        {% else %}
+          <td>Uninformed</td>
+        {% endif %}
       </tr>
     {% endfor %}
   </tbody>
