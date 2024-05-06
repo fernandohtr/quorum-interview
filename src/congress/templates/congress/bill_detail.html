@@ -7,6 +7,8 @@
   <li>Origin: {{ bill.get_origin_display }}</li>
   {% if bill.sponsor %}
     <li>Sponsor: {{ bill.sponsor }}</li>
+  {% else %}
+    <li>Sponsor: Uninformed</li>
   {% endif %}
 </ul>
 
