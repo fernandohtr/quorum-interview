@@ -69,3 +69,13 @@ If there is any inconsistency in the data imported from the CSV file, error mess
 [csv inconsistency] [vote result id 92516784] Does not exist Vote with vote_id: 3321166
 [csv inconsistency] [vote result id 92516770] Does not exist Vote with vote_id: 3321166
 ```
+
+### 3. Start application
+
+Run
+
+```bash
+make up
+```
+
+Acsess [http://127.0.0.1:8000/congress](http://127.0.0.1:8000/congress)
