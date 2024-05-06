@@ -13,7 +13,6 @@
 
 <table>
   <thead>
-    <th>ID</th>
     <th>Legislator</th>
     <th>Supported bills</th>
     <th>Opposed bills</th>
@@ -21,8 +20,11 @@
   <tbody>
     {% for legislator in legislators %}
       <tr>
-        <td>{{ legislator.id }}</td>
-        <td>{{ legislator.name }}</td>
+        <td>
+          <a href="{% url 'legislator_detail' legislator.slug %}">
+            {{ legislator.name }}
+          </a>
+        </td>
         <td>{{ legislator.supported_votes }}</td>
         <td>{{ legislator.opposed_votes }}</td>
       </tr>
