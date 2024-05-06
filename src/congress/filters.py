@@ -4,10 +4,11 @@ from congress.models import Bill, Legislator
 
 
 class LegislatorFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr="icontains")
+
     class Meta:
         model = Legislator
         fields = [
-            "name",
             "political_party",
             "state",
             "congress_house",
@@ -15,11 +16,12 @@ class LegislatorFilter(django_filters.FilterSet):
 
 
 class BillFilter(django_filters.FilterSet):
+    sponsor__name = django_filters.CharFilter(lookup_expr="icontains")
+    title = django_filters.CharFilter(lookup_expr="icontains")
+
     class Meta:
         model = Bill
         fields = [
             "number",
-            "title",
             "origin",
-            "sponsor__name",
         ]
