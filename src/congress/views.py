@@ -1,8 +1,8 @@
 from django.db.models import Case, Count, IntegerField, When
 from django.views.generic import DetailView, ListView
 
-from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
 from congress.filters import BillFilter, LegislatorFilter
+from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
 from congress.models import Bill, Legislator, Vote, VoteResult
 
 
@@ -116,12 +116,12 @@ class LegislatorDetail(DetailView):
         supported_bills = Vote.objects.filter(
             voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
             voteresult__legislator__id=context["legislator"].id,
-        ).select_related('bill')
+        ).select_related("bill")
 
         opposed_bills = Vote.objects.filter(
             voteresult__vote_type=VoteResult.VoteType.OPPOSES,
             voteresult__legislator__id=context["legislator"].id,
-        ).select_related('bill')
+        ).select_related("bill")
 
         votes = self.keep_same_length_votes(supported_bills, opposed_bills)
 

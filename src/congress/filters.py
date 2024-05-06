@@ -1,4 +1,5 @@
 import django_filters
+
 from congress.models import Bill, Legislator
 
 
