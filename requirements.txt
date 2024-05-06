@@ -4,6 +4,7 @@ black==24.4.2 ; python_version >= "3.12" and python_version < "4.0"
 click==8.1.7 ; python_version >= "3.12" and python_version < "4.0"
 colorama==0.4.6 ; python_version >= "3.12" and python_version < "4.0" and (sys_platform == "win32" or platform_system == "Windows")
 dill==0.3.8 ; python_version >= "3.12" and python_version < "4.0"
+django-filter==24.2 ; python_version >= "3.12" and python_version < "4.0"
 django==5.0.4 ; python_version >= "3.12" and python_version < "4.0"
 isort==5.13.2 ; python_version >= "3.12" and python_version < "4.0"
 mccabe==0.7.0 ; python_version >= "3.12" and python_version < "4.0"
