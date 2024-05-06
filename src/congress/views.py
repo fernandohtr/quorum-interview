@@ -2,7 +2,7 @@ from django.db.models import Case, Count, IntegerField, When
 from django.views.generic import DetailView, ListView
 
 from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
-from congress.models import Bill, Legislator, VoteResult
+from congress.models import Bill, Legislator, Vote, VoteResult
 
 
 class ListLegislatorsVoteView(ListView):
@@ -92,6 +92,42 @@ class DetailLegislator(DetailView):
     template_name = "congress/legislator_detail.html"
     model = Legislator
     context_object_name = "legislator"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        supported_bills = Vote.objects.filter(
+            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
+            voteresult__legislator__id=context["legislator"].id,
+        ).select_related('bill')
+
+        opposed_bills = Vote.objects.filter(
+            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
+            voteresult__legislator__id=context["legislator"].id,
+        ).select_related('bill')
+
+        votes = self.keep_same_length_votes(supported_bills, opposed_bills)
+
+        context["votes"] = votes
+
+        return context
+
+    def keep_same_length_votes(self, list1, list2):
+        len1 = list1.count()
+        len2 = list2.count()
+
+        list1 = [l.bill.title for l in list1]
+        list2 = [l.bill.title for l in list2]
+
+        max_length = max(len1, len2)
+
+        if len1 < max_length:
+            list1 += [""] * (max_length - len1)
+
+        elif len2 < max_length:
+            list2 += [""] * (max_length - len2)
+
+        return zip(list1, list2)
 
 
 class DetailBill(DetailView):
