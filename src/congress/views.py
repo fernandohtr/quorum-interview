@@ -2,6 +2,7 @@ from django.db.models import Case, Count, IntegerField, When
 from django.views.generic import DetailView, ListView
 
 from congress.forms import BillVoteResultForm, LegislatorVoteResultForm
+from congress.filters import LegislatorFilter
 from congress.models import Bill, Legislator, Vote, VoteResult
 
 
@@ -88,7 +89,23 @@ class ListLegislatorsAndBillsView(ListView):
         return context
 
 
-class DetailLegislator(DetailView):
+class LegislatorList(ListView):
+    queryset = Legislator.objects.all()
+    template = "congress/legislator_list.html"
+    context_object_name = "legislators"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = LegislatorFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.filterset.form
+        return context
+
+
+class LegislatorDetail(DetailView):
     template_name = "congress/legislator_detail.html"
     model = Legislator
     context_object_name = "legislator"
@@ -130,7 +147,7 @@ class DetailLegislator(DetailView):
         return zip(list1, list2)
 
 
-class DetailBill(DetailView):
+class BillDetail(DetailView):
     template_name = "congress/bill_detail.html"
     model = Bill
     context_object_name = "bill"

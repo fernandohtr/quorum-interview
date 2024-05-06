@@ -1,0 +1,13 @@
+import django_filters
+from congress.models import Legislator
+
+
+class LegislatorFilter(django_filters.FilterSet):
+    class Meta:
+        model = Legislator
+        fields = [
+            "name",
+            "political_party",
+            "state",
+            "congress_house",
+        ]
