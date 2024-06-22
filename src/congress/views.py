@@ -13,20 +13,7 @@ class ListLegislatorsVoteView(ListView):
     def get_queryset(self):
         legislator_name = self.request.GET.get("name")
 
-        legislators_with_votes = Legislator.objects.annotate(
-            supported_votes=Count(
-                Case(
-                    When(voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
-                    output_field=IntegerField(),
-                )
-            ),
-            opposed_votes=Count(
-                Case(
-                    When(voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
-                    output_field=IntegerField(),
-                )
-            ),
-        ).values("name", "supported_votes", "opposed_votes", "slug")
+        legislators_with_votes = Legislator.objects.legislators_with_votes()
 
         if legislator_name:
             legislators_with_votes = legislators_with_votes.filter(name__icontains=legislator_name)
@@ -47,20 +34,7 @@ class ListBillsVoteView(ListView):
     def get_queryset(self):
         bill_title = self.request.GET.get("title")
 
-        bills_with_counts = Bill.objects.annotate(
-            supported_votes=Count(
-                Case(
-                    When(vote__voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
-                    output_field=IntegerField(),
-                )
-            ),
-            opposed_votes=Count(
-                Case(
-                    When(vote__voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
-                    output_field=IntegerField(),
-                )
-            ),
-        ).values("title", "slug", "supported_votes", "opposed_votes", "sponsor__name", "sponsor__slug")
+        bills_with_counts = Bill.objects.bill_with_counts()
 
         if bill_title:
             bills_with_counts = bills_with_counts.filter(title__icontains=bill_title).values(
@@ -112,16 +86,10 @@ class LegislatorDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        legislator_id = context["legislator"].id
 
-        supported_bills = Vote.objects.filter(
-            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
-            voteresult__legislator__id=context["legislator"].id,
-        ).select_related("bill")
-
-        opposed_bills = Vote.objects.filter(
-            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
-            voteresult__legislator__id=context["legislator"].id,
-        ).select_related("bill")
+        supported_bills = Vote.objects.supported(legislator_id)
+        opposed_bills = Vote.objects.opposed(legislator_id)
 
         votes = self.keep_same_length_votes(supported_bills, opposed_bills)
 
@@ -170,16 +138,10 @@ class BillDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        bill_id = context["bill"].id
 
-        supported_legislators = Legislator.objects.filter(
-            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
-            voteresult__vote__bill__id=context["bill"].id,
-        )
-
-        opposed_legislators = Legislator.objects.filter(
-            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
-            voteresult__vote__bill__id=context["bill"].id,
-        )
+        supported_legislators = Legislator.objects.supported(bill_id)
+        opposed_legislators = Legislator.objects.opposed(bill_id)
 
         legislators = self.keep_same_length_legislators(supported_legislators, opposed_legislators)
 

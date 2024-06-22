@@ -2,6 +2,37 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from django.db.models import Case, Count, IntegerField, When
+
+
+class LegislatorManager(models.Manager):
+    def supported(self, bill_id):
+        return self.filter(
+            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
+            voteresult__vote__bill__id=bill_id,
+        )
+
+    def opposed(self, bill_id):
+        return self.filter(
+            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
+            voteresult__vote__bill__id=bill_id,
+        )
+
+    def legislators_with_votes(self):
+        return self.annotate(
+            supported_votes=Count(
+                Case(
+                    When(voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+            opposed_votes=Count(
+                Case(
+                    When(voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+        ).values("name", "supported_votes", "opposed_votes", "slug")
 
 
 class Legislator(models.Model):
@@ -90,6 +121,8 @@ class Legislator(models.Model):
     slug = models.SlugField()
     votes = models.ManyToManyField("Vote", through="VoteResult", blank=True)
 
+    objects = LegislatorManager()
+
     def __str__(self):
         return self.name
 
@@ -98,6 +131,24 @@ class Legislator(models.Model):
 def create_legislator_slug(sender, instance, **kwargs):
     if not instance.slug:
         instance.slug = slugify(f"{instance.name} {instance.political_party} {instance.state} {instance.district}")
+
+
+class BillManager(models.Manager):
+    def bill_with_counts(self):
+        return self.annotate(
+            supported_votes=Count(
+                Case(
+                    When(vote__voteresult__vote_type=VoteResult.VoteType.SUPPORTES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+            opposed_votes=Count(
+                Case(
+                    When(vote__voteresult__vote_type=VoteResult.VoteType.OPPOSES, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+        ).values("title", "slug", "supported_votes", "opposed_votes", "sponsor__name", "sponsor__slug")
 
 
 class Bill(models.Model):
@@ -111,6 +162,8 @@ class Bill(models.Model):
     sponsor = models.ForeignKey(Legislator, on_delete=models.CASCADE, blank=True, null=True)
     slug = models.SlugField()
 
+    objects = BillManager()
+
     def __str__(self):
         return self.title
 
@@ -121,9 +174,25 @@ def create_bill_slug(sender, instance, **kwargs):
         instance.slug = slugify({instance.number})
 
 
+class VoteManager(models.Manager):
+    def supported(self, legislator_id):
+        return self.filter(
+            voteresult__vote_type=VoteResult.VoteType.SUPPORTES,
+            voteresult__legislator__id=legislator_id,
+        ).select_related("bill")
+
+    def opposed(self, legislator_id):
+        return self.filter(
+            voteresult__vote_type=VoteResult.VoteType.OPPOSES,
+            voteresult__legislator__id=legislator_id,
+        ).select_related("bill")
+
+
 class Vote(models.Model):
     bill = models.OneToOneField(Bill, on_delete=models.CASCADE, blank=True, null=True)
     legislators = models.ManyToManyField("Legislator", through="VoteResult", blank=True)
+
+    objects = VoteManager()
 
 
 class VoteResult(models.Model):
