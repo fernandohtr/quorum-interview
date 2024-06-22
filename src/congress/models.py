@@ -83,11 +83,12 @@ class Legislator(models.Model):
         SENATOR = 2
 
     name = models.CharField(max_length=250)
-    political_party = models.CharField(choices=PoliticalPartyType, max_length=3, blank=True, null=True)
-    state = models.CharField(choices=StateType, max_length=2, blank=True, null=True)
-    district = models.SmallIntegerField(blank=True, null=True)
-    congress_house = models.SmallIntegerField(choices=CongressHouse, blank=True, null=True)
-    slug = models.SlugField(blank=True, null=True)
+    political_party = models.CharField(choices=PoliticalPartyType, max_length=3)
+    state = models.CharField(choices=StateType, max_length=2)
+    district = models.SmallIntegerField()
+    congress_house = models.SmallIntegerField(choices=CongressHouse)
+    slug = models.SlugField()
+    votes = models.ManyToManyField("Vote", through="VoteResult", blank=True)
 
     def __str__(self):
         return self.name
@@ -104,11 +105,11 @@ class Bill(models.Model):
         HOUSE_RESOLUTION = "H.R."
         SENATOR = "S."
 
-    number = models.CharField(max_length=8, blank=True, null=True)
+    number = models.CharField(max_length=8)
     title = models.CharField(max_length=250)
-    origin = models.CharField(choices=OriginType, max_length=4, blank=True, null=True)
+    origin = models.CharField(choices=OriginType, max_length=4)
     sponsor = models.ForeignKey(Legislator, on_delete=models.CASCADE, blank=True, null=True)
-    slug = models.SlugField(blank=True, null=True)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.title
@@ -122,6 +123,7 @@ def create_bill_slug(sender, instance, **kwargs):
 
 class Vote(models.Model):
     bill = models.OneToOneField(Bill, on_delete=models.CASCADE, blank=True, null=True)
+    legislators = models.ManyToManyField("Legislator", through="VoteResult", blank=True)
 
 
 class VoteResult(models.Model):
@@ -129,6 +131,6 @@ class VoteResult(models.Model):
         SUPPORTES = 1
         OPPOSES = 2
 
-    legislator = models.ForeignKey(Legislator, on_delete=models.CASCADE, blank=True, null=True)
-    vote = models.ForeignKey(Vote, on_delete=models.CASCADE, blank=True, null=True)
+    legislator = models.ForeignKey(Legislator, on_delete=models.SET_NULL, blank=True, null=True)
+    vote = models.ForeignKey(Vote, on_delete=models.SET_NULL, blank=True, null=True)
     vote_type = models.IntegerField(choices=VoteType)
