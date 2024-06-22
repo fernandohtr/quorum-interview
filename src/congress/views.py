@@ -1,4 +1,3 @@
-from django.db.models import Case, Count, IntegerField, When
 from django.views.generic import DetailView, ListView
 
 from congress.filters import BillFilter, LegislatorFilter

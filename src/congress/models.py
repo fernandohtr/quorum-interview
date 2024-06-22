@@ -1,8 +1,8 @@
 from django.db import models
+from django.db.models import Case, Count, IntegerField, When
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
-from django.db.models import Case, Count, IntegerField, When
 
 
 class LegislatorManager(models.Manager):
