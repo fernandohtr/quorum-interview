@@ -27,5 +27,5 @@ class LegislatorFactory(DjangoModelFactory):
         bill2 = BillFactory(sponsor=None)
         vote1 = VoteFactory(bill=bill1)
         vote2 = VoteFactory(bill=bill2)
-        VoteResultFactory(legislator=self, vote=vote1)
-        VoteResultFactory(legislator=self, vote=vote2)
+        VoteResultFactory(legislator=self, vote=vote1, vote_type=1)
+        VoteResultFactory(legislator=self, vote=vote2, vote_type=2)
