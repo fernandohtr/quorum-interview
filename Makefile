@@ -15,3 +15,6 @@ populate:
 
 up:
 	./src/manage.py runserver
+
+test:
+	pytest

@@ -79,3 +79,11 @@ make up
 ```
 
 Acsess [http://127.0.0.1:8000/congress](http://127.0.0.1:8000/congress)
+
+## How to run tests
+
+Run
+
+```bash
+make test
+```
