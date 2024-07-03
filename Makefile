@@ -17,4 +17,4 @@ up:
 	./src/manage.py runserver
 
 test:
-	pytest
+	@pytest

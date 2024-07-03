@@ -1,3 +1,5 @@
+from itertools import zip_longest
+
 from django.views.generic import DetailView, ListView
 
 from congress.filters import BillFilter, LegislatorFilter
@@ -90,28 +92,11 @@ class LegislatorDetail(DetailView):
         supported_bills = Vote.objects.supported(legislator_id)
         opposed_bills = Vote.objects.opposed(legislator_id)
 
-        votes = self.keep_same_length_votes(supported_bills, opposed_bills)
+        votes = zip_longest(supported_bills, opposed_bills, fillvalue="")
 
         context["votes"] = votes
 
         return context
-
-    def keep_same_length_votes(self, list1, list2):
-        len1 = list1.count()
-        len2 = list2.count()
-
-        list1 = [l.bill.title for l in list1]
-        list2 = [l.bill.title for l in list2]
-
-        max_length = max(len1, len2)
-
-        if len1 < max_length:
-            list1 += [""] * (max_length - len1)
-
-        elif len2 < max_length:
-            list2 += [""] * (max_length - len2)
-
-        return zip(list1, list2)
 
 
 class BillList(ListView):
@@ -142,25 +127,8 @@ class BillDetail(DetailView):
         supported_legislators = Legislator.objects.supported(bill_id)
         opposed_legislators = Legislator.objects.opposed(bill_id)
 
-        legislators = self.keep_same_length_legislators(supported_legislators, opposed_legislators)
+        legislators = zip_longest(supported_legislators, opposed_legislators, fillvalue="")
 
         context["legislators"] = legislators
 
         return context
-
-    def keep_same_length_legislators(self, list1, list2):
-        len1 = list1.count()
-        len2 = list2.count()
-
-        list1 = [l.name for l in list1]
-        list2 = [l.name for l in list2]
-
-        max_length = max(len1, len2)
-
-        if len1 < max_length:
-            list1 += [""] * (max_length - len1)
-
-        elif len2 < max_length:
-            list2 += [""] * (max_length - len2)
-
-        return zip(list1, list2)

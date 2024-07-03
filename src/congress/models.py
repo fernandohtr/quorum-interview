@@ -194,6 +194,9 @@ class Vote(models.Model):
 
     objects = VoteManager()
 
+    def __str__(self):
+        return self.bill.title
+
 
 class VoteResult(models.Model):
     class VoteType(models.IntegerChoices):
